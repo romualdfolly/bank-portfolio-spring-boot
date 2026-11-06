@@ -1,0 +1,237 @@
+
+<!DOCTYPE html>
+<html lang="fr"
+      xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{layout :: layout(~{::title}, ~{::main})}">
+
+<head>
+    <title>Détails client | Bank Portfolio</title>
+</head>
+
+<body>
+<main>
+    <div class="max-w-6xl mx-auto px-6 pt-28 pb-12">
+
+        <!-- Navigation -->
+        <a th:href="@{/clients}"
+           class="inline-flex items-center gap-2 text-sm font-semibold
+                  text-slate-500 hover:text-[#172554] mb-6 transition">
+            <i data-lucide="arrow-left" class="w-4 h-4"></i>
+            Retour aux clients
+        </a>
+
+        <!-- Profil compact -->
+        <section class="bg-white border border-slate-200 rounded-xl
+                        shadow-sm p-5 md:p-6 mb-6">
+
+            <div class="flex flex-col sm:flex-row sm:items-center gap-5">
+
+                <!-- Avatar -->
+                <div class="w-14 h-14 shrink-0 rounded-lg bg-blue-50
+                            text-[#172554] flex items-center justify-center">
+                    <i data-lucide="user-round" class="w-7 h-7"></i>
+                </div>
+
+                <!-- Identité -->
+                <div class="flex-1 min-w-0">
+
+                    <div class="flex flex-wrap items-center gap-3">
+                        <h1 class="text-2xl font-bold text-[#172554]"
+                            th:text="|${client.prenom} ${client.nom}|">
+                            Jean Dupont
+                        </h1>
+
+                        <span class="bg-slate-100 text-slate-600
+                                     text-xs font-semibold px-2.5 py-1 rounded-md"
+                              th:text="|Client #${client.id}|">
+                            Client #1
+                        </span>
+                    </div>
+
+                    <div class="flex items-center gap-2 mt-2
+                                text-sm text-slate-500">
+                        <i data-lucide="mail" class="w-4 h-4 shrink-0"></i>
+                        <span class="break-all" th:text="${client.email}">
+                            jean@example.com
+                        </span>
+                    </div>
+                </div>
+
+                <!-- Statistique -->
+                <div class="sm:border-l border-slate-200 sm:pl-6">
+                    <p class="text-xs font-semibold uppercase
+                              tracking-wide text-slate-400">
+                        Comptes bancaires
+                    </p>
+                    <p class="text-2xl font-bold text-[#172554] mt-1"
+                       th:text="${#lists.size(comptes)}">
+                        0
+                    </p>
+                </div>
+
+            </div>
+        </section>
+
+        <!-- Messages -->
+        <div th:if="${error}" class="flex justify-center mb-5">
+            <div class="inline-flex items-center gap-2
+                        px-5 py-3 rounded-md
+                        bg-red-50 border border-red-200
+                        text-red-700 text-sm">
+
+                <i data-lucide="alert-circle" class="w-4 h-4"></i>
+                <span th:text="${error}"></span>
+
+            </div>
+        </div>
+
+        <!-- Message de succès -->
+        <div th:if="${success}" class="flex justify-center mb-5">
+            <div class="inline-flex items-center gap-2
+                        px-5 py-3 rounded-md
+                        bg-emerald-50 border border-emerald-200
+                        text-emerald-700 text-sm">
+
+                <i data-lucide="check-circle" class="w-4 h-4"></i>
+                <span th:text="${success}"></span>
+
+            </div>
+        </div>
+
+        <!-- Gestion des comptes -->
+        <section class="bg-white border border-slate-200
+                        rounded-xl shadow-sm overflow-hidden">
+
+            <!-- En-tête et création -->
+            <div class="px-5 md:px-6 py-5 border-b border-slate-200">
+
+                <div class="flex flex-col lg:flex-row
+                            lg:items-center lg:justify-between gap-4">
+
+                    <div>
+                        <h2 class="text-lg font-bold text-[#172554]">
+                            Comptes bancaires
+                        </h2>
+                        <p class="text-sm text-slate-500 mt-1">
+                            Gérez les comptes associés à ce client.
+                        </p>
+                    </div>
+
+                    <!-- Formulaire compact -->
+                    <form th:action="@{/comptes/create}"
+                          method="post"
+                          class="flex flex-col sm:flex-row gap-2">
+
+                        <input type="hidden"
+                               name="clientId"
+                               th:value="${client.id}">
+
+                        <input type="text"
+                               name="numero"
+                               placeholder="Numéro de compte"
+                               aria-label="Numéro de compte"
+                               required
+                               class="w-full sm:w-56 bg-white
+                                      border border-slate-300
+                                      rounded-md px-3 py-2 text-sm
+                                      focus:outline-none
+                                      focus:border-[#172554]
+                                      focus:ring-2 focus:ring-blue-900/10">
+
+                        <button type="submit"
+                                class="inline-flex items-center justify-center
+                                       gap-2 bg-[#172554] hover:bg-[#1e3a8a]
+                                       text-white text-sm font-semibold
+                                       px-4 py-2 rounded-md transition">
+                            <i data-lucide="plus" class="w-4 h-4"></i>
+                            Créer
+                        </button>
+                    </form>
+
+                </div>
+            </div>
+
+            <!-- Aucun compte -->
+            <div th:if="${#lists.isEmpty(comptes)}"
+                 class="py-12 px-5 text-center">
+
+                <div class="w-11 h-11 bg-slate-100 text-slate-400
+                            rounded-lg flex items-center justify-center
+                            mx-auto mb-3">
+                    <i data-lucide="wallet" class="w-6 h-6"></i>
+                </div>
+
+                <p class="font-semibold text-slate-700">
+                    Aucun compte bancaire
+                </p>
+
+                <p class="text-sm text-slate-500 mt-1">
+                    Saisissez un numéro ci-dessus pour créer le premier compte.
+                </p>
+            </div>
+
+            <!-- Liste des comptes -->
+            <div th:unless="${#lists.isEmpty(comptes)}"
+                 class="overflow-x-auto">
+
+                <table class="w-full text-sm text-left">
+
+                    <thead class="bg-slate-50 border-b border-slate-200
+                                  text-xs uppercase tracking-wider text-slate-500">
+                        <tr>
+                            <th class="px-6 py-3 font-semibold">
+                                Numéro de compte
+                            </th>
+                            <th class="px-6 py-3 font-semibold">
+                                Solde
+                            </th>
+                            <th class="px-6 py-3 font-semibold text-right">
+                                Actions
+                            </th>
+                        </tr>
+                    </thead>
+
+                    <tbody class="divide-y divide-slate-100">
+
+                        <tr th:each="compte : ${comptes}"
+                            class="hover:bg-slate-50 transition-colors">
+
+                            <td class="px-6 py-3.5">
+                                <div class="flex items-center gap-3
+                                            font-semibold text-[#172554]">
+                                    <i data-lucide="credit-card"
+                                       class="w-4 h-4 text-slate-400"></i>
+                                    <span th:text="${compte.numero}">
+                                        CPT-001
+                                    </span>
+                                </div>
+                            </td>
+
+                            <td class="px-6 py-3.5 font-semibold text-slate-800"
+                                th:text="${compte.solde}">
+                                0.00
+                            </td>
+
+                            <td class="px-6 py-3.5 text-right">
+                                <a th:href="@{/comptes/{numero}(numero=${compte.numero})}"
+                                   class="inline-flex items-center gap-1.5
+                                          border border-slate-200
+                                          text-[#172554] hover:bg-blue-50
+                                          text-xs font-semibold
+                                          px-3 py-1.5 rounded-md transition">
+
+                                    <i data-lucide="eye" class="w-4 h-4"></i>
+                                    Détails
+                                </a>
+                            </td>
+
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+        </section>
+    </div>
+</main>
+</body>
+</html>

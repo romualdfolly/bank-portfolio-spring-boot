@@ -1,0 +1,352 @@
+
+<!DOCTYPE html>
+<html lang="fr"
+      xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{layout :: layout(~{::title}, ~{::main})}">
+
+<head>
+    <title>Détails du compte | Bank Portfolio</title>
+</head>
+
+<body>
+<main>
+    <div class="max-w-6xl mx-auto px-6 pt-28 pb-12">
+
+        <!-- Retour -->
+        <a th:href="@{/clients/{id}(id=${compte.clientId})}"
+           class="inline-flex items-center gap-2 mb-6
+                  text-sm font-semibold text-slate-500
+                  hover:text-[#172554] transition">
+
+            <i data-lucide="arrow-left" class="w-4 h-4"></i>
+            Retour au client
+        </a>
+
+        <!-- Messages -->
+        <div th:if="${success}"
+             class="mb-5 px-4 py-3 rounded-md
+                    bg-emerald-50 border border-emerald-200
+                    text-emerald-700 text-sm"
+             th:text="${success}">
+        </div>
+
+        <div th:if="${error}"
+             class="mb-5 px-4 py-3 rounded-md
+                    bg-red-50 border border-red-200
+                    text-red-700 text-sm"
+             th:text="${error}">
+        </div>
+
+        <!-- Carte du compte -->
+        <section class="bg-[#172554] text-white
+                        rounded-xl p-6 md:p-8 mb-6">
+
+            <div class="flex flex-col sm:flex-row
+                        sm:items-center sm:justify-between gap-5">
+
+                <div>
+                    <div class="flex items-center gap-2 text-blue-200 text-sm">
+                        <i data-lucide="landmark" class="w-5 h-5"></i>
+                        Bank Portfolio
+                    </div>
+
+                    <p class="mt-6 text-sm text-blue-200">
+                        Solde disponible
+                    </p>
+
+                    <h1 class="text-4xl font-bold mt-2">
+                        <span th:text="${compte.solde}">0.00</span>
+                    </h1>
+
+                    <p class="mt-5 text-sm text-blue-200">
+                        Numéro de compte
+                    </p>
+
+                    <p class="font-semibold mt-1"
+                       th:text="${compte.numero}">
+                        CPT-001
+                    </p>
+                </div>
+
+                <div class="w-16 h-16 rounded-xl
+                            bg-white/10 flex items-center
+                            justify-center">
+
+                    <i data-lucide="wallet"
+                       class="w-9 h-9 text-white"></i>
+                </div>
+            </div>
+        </section>
+
+        <!-- Opérations bancaires -->
+        <section class="mb-8">
+
+            <div class="mb-5">
+                <h2 class="text-xl font-bold text-[#172554]">
+                    Opérations bancaires
+                </h2>
+
+                <p class="text-sm text-slate-500 mt-1">
+                    Effectuez un dépôt, un retrait ou un virement.
+                </p>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-5">
+
+                <!-- DÉPÔT -->
+                <div class="bg-white border border-slate-200
+                            rounded-xl shadow-sm p-5">
+
+                    <div class="flex items-center gap-3 mb-5">
+
+                        <div class="w-10 h-10 rounded-md
+                                    bg-emerald-50 text-emerald-700
+                                    flex items-center justify-center">
+                            <i data-lucide="arrow-down-left"
+                               class="w-5 h-5"></i>
+                        </div>
+
+                        <h3 class="font-bold text-[#172554]">
+                            Dépôt
+                        </h3>
+                    </div>
+
+                    <form th:action="@{/comptes/deposit}"
+                          method="post"
+                          class="space-y-4">
+
+                        <input type="hidden"
+                               name="numero"
+                               th:value="${compte.numero}">
+
+                        <div>
+                            <label class="block text-sm font-semibold
+                                          text-slate-700 mb-2">
+                                Montant
+                            </label>
+
+                            <input type="number"
+                                   name="montant"
+                                   min="0.01"
+                                   step="0.01"
+                                   placeholder="0.00"
+                                   required
+                                   class="w-full border border-slate-300
+                                          rounded-md px-3 py-2.5 text-sm
+                                          focus:outline-none
+                                          focus:border-[#172554]">
+                        </div>
+
+                        <button type="submit"
+                                class="w-full bg-[#172554]
+                                       hover:bg-[#1e3a8a]
+                                       text-white text-sm font-semibold
+                                       px-4 py-2.5 rounded-md transition">
+                            Effectuer le dépôt
+                        </button>
+                    </form>
+                </div>
+
+                <!-- RETRAIT -->
+                <div class="bg-white border border-slate-200
+                            rounded-xl shadow-sm p-5">
+
+                    <div class="flex items-center gap-3 mb-5">
+
+                        <div class="w-10 h-10 rounded-md
+                                    bg-amber-50 text-amber-700
+                                    flex items-center justify-center">
+                            <i data-lucide="arrow-up-right"
+                               class="w-5 h-5"></i>
+                        </div>
+
+                        <h3 class="font-bold text-[#172554]">
+                            Retrait
+                        </h3>
+                    </div>
+
+                    <form th:action="@{/comptes/withdraw}"
+                          method="post"
+                          class="space-y-4">
+
+                        <input type="hidden"
+                               name="numero"
+                               th:value="${compte.numero}">
+
+                        <div>
+                            <label class="block text-sm font-semibold
+                                          text-slate-700 mb-2">
+                                Montant
+                            </label>
+
+                            <input type="number"
+                                   name="montant"
+                                   min="0.01"
+                                   step="0.01"
+                                   placeholder="0.00"
+                                   required
+                                   class="w-full border border-slate-300
+                                          rounded-md px-3 py-2.5 text-sm
+                                          focus:outline-none
+                                          focus:border-[#172554]">
+                        </div>
+
+                        <button type="submit"
+                                class="w-full bg-[#172554]
+                                       hover:bg-[#1e3a8a]
+                                       text-white text-sm font-semibold
+                                       px-4 py-2.5 rounded-md transition">
+                            Effectuer le retrait
+                        </button>
+                    </form>
+                </div>
+
+                <!-- VIREMENT -->
+                <div class="bg-white border border-slate-200
+                            rounded-xl shadow-sm p-5">
+
+                    <div class="flex items-center gap-3 mb-5">
+
+                        <div class="w-10 h-10 rounded-md
+                                    bg-blue-50 text-blue-700
+                                    flex items-center justify-center">
+                            <i data-lucide="arrow-left-right"
+                               class="w-5 h-5"></i>
+                        </div>
+
+                        <h3 class="font-bold text-[#172554]">
+                            Virement
+                        </h3>
+                    </div>
+
+                    <form th:action="@{/comptes/transfert}"
+                          method="post"
+                          class="space-y-4">
+
+                        <input type="hidden"
+                               name="numeroSource"
+                               th:value="${compte.numero}">
+
+                        <div>
+                            <label class="block text-sm font-semibold
+                                          text-slate-700 mb-2">
+                                Compte destinataire
+                            </label>
+
+                            <input type="text"
+                                   name="numeroDestination"
+                                   placeholder="CPT-002"
+                                   required
+                                   class="w-full border border-slate-300
+                                          rounded-md px-3 py-2.5 text-sm
+                                          focus:outline-none
+                                          focus:border-[#172554]">
+                        </div>
+
+                        <div>
+                            <label class="block text-sm font-semibold
+                                          text-slate-700 mb-2">
+                                Montant
+                            </label>
+
+                            <input type="number"
+                                   name="montant"
+                                   min="0.01"
+                                   step="0.01"
+                                   placeholder="0.00"
+                                   required
+                                   class="w-full border border-slate-300
+                                          rounded-md px-3 py-2.5 text-sm
+                                          focus:outline-none
+                                          focus:border-[#172554]">
+                        </div>
+
+                        <button type="submit"
+                                class="w-full bg-[#172554]
+                                       hover:bg-[#1e3a8a]
+                                       text-white text-sm font-semibold
+                                       px-4 py-2.5 rounded-md transition">
+                            Effectuer le virement
+                        </button>
+                    </form>
+                </div>
+
+            </div>
+        </section>
+
+        <!-- Historique -->
+        <section class="bg-white border border-slate-200
+                        rounded-xl shadow-sm overflow-hidden">
+
+            <div class="px-6 py-5 border-b border-slate-100">
+                <h2 class="text-lg font-bold text-[#172554]">
+                    Historique des transactions
+                </h2>
+
+                <p class="text-sm text-slate-500 mt-1">
+                    Dépôts, retraits et virements effectués sur ce compte.
+                </p>
+            </div>
+
+            <div th:if="${transactions == null or #lists.isEmpty(transactions)}"
+                 class="px-6 py-12 text-center">
+
+                <i data-lucide="history"
+                   class="w-10 h-10 text-slate-300 mx-auto mb-3"></i>
+
+                <p class="text-sm text-slate-500">
+                    Aucune transaction pour le moment.
+                </p>
+            </div>
+
+            <div th:if="${transactions != null and !#lists.isEmpty(transactions)}"
+                 class="overflow-x-auto">
+
+                <table class="w-full text-sm text-left">
+
+                    <thead class="bg-slate-50 border-b border-slate-200
+                                  text-xs uppercase tracking-wider
+                                  text-slate-500">
+                        <tr>
+                            <th class="px-6 py-3 font-semibold">Type</th>
+                            <th class="px-6 py-3 font-semibold">Montant</th>
+                            <th class="px-6 py-3 font-semibold">Source</th>
+                            <th class="px-6 py-3 font-semibold">Destination</th>
+                        </tr>
+                    </thead>
+
+                    <tbody class="divide-y divide-slate-100">
+                        <tr th:each="transaction : ${transactions}"
+                            class="hover:bg-slate-50">
+
+                            <td class="px-6 py-4 font-semibold text-[#172554]"
+                                th:text="${transaction.type}">
+                                DEPOT
+                            </td>
+
+                            <td class="px-6 py-4"
+                                th:text="${transaction.montant}">
+                                100.00
+                            </td>
+
+                            <td class="px-6 py-4 text-slate-500"
+                                th:text="${transaction.compteSource ?: '—'}">
+                                —
+                            </td>
+
+                            <td class="px-6 py-4 text-slate-500"
+                                th:text="${transaction.compteDestination ?: '—'}">
+                                CPT-001
+                            </td>
+                        </tr>
+                    </tbody>
+
+                </table>
+            </div>
+
+        </section>
+
+    </div>
+</main>
+</body>
+</html>

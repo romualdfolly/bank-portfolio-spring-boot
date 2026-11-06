@@ -1,0 +1,38 @@
+
+<!DOCTYPE html>
+<html lang="fr"
+      xmlns:th="http://www.thymeleaf.org"
+      th:fragment="layout(title, content)">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+        <title th:replace="${title}">Bank Portfolio</title>
+
+        <script src="https://cdn.tailwindcss.com"></script>
+
+        <style>
+            body {
+                font-family: Arial, sans-serif;
+            }
+        </style>
+    </head>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            lucide.createIcons();
+        });
+    </script>
+
+    <body class="min-h-screen flex flex-col bg-slate-50 text-slate-900">
+
+        <div th:replace="~{fragments/navbar :: navbar}"></div>
+
+        <main class="flex-1">
+            <div th:replace="${content}"></div>
+        </main>
+
+        <div th:replace="~{fragments/footer :: footer}"></div>
+
+    </body>
+</html>

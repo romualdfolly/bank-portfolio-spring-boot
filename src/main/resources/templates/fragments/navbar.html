@@ -1,0 +1,42 @@
+
+<nav th:fragment="navbar"
+     class="absolute top-4 left-0 right-0 z-50
+            max-w-7xl mx-auto px-4">
+
+    <div class="h-16 px-6 md:px-8
+                flex items-center justify-between
+                bg-white/95 backdrop-blur-xl
+                border border-slate-200/70
+                rounded-2xl shadow-lg shadow-slate-900/5">
+
+        <!-- Logo -->
+        <a th:href="@{/}"
+           class="flex items-center gap-3
+                  text-[#172554] font-bold text-xl
+                  whitespace-nowrap">
+
+            <i data-lucide="landmark"
+               class="w-8 h-8 stroke-[2]"></i>
+
+            <span>Bank Portfolio</span>
+        </a>
+
+        <!-- Profil -->
+        <div class="w-9 h-9 rounded-full
+                    bg-slate-100 border border-slate-200
+                    flex items-center justify-center
+                    text-[#172554]">
+
+            <i data-lucide="user-round"
+               class="w-5 h-5"></i>
+        </div>
+
+    </div>
+
+    <!-- Lucide -->
+    <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
+    <script>
+        lucide.createIcons();
+    </script>
+
+</nav>
